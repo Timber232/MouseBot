@@ -36,7 +36,7 @@ public class MBRunnable extends Thread{
 				int y = Integer.parseInt(mouseBotUI.table.getColumns().get(2).getCellData(o).toString());
 				//String action = mouseBotUI.table.getColumns().get(3).getCellData(o).toString();
 				float timer = Float.parseFloat(mouseBotUI.table.getColumns().get(4).getCellData(o).toString())*1000;
-				int jitter = (int)mouseBotUI.table.getColumns().get(5).getCellData(o);
+				int jitter = Integer.parseInt(mouseBotUI.table.getColumns().get(5).getCellData(o).toString());
 				int loop = Integer.parseInt(mouseBotUI.table.getColumns().get(6).getCellData(o).toString());
 				totalCellLoop = loop;
 				for(currentCellLoop = 0; currentCellLoop<totalCellLoop; currentCellLoop++) {

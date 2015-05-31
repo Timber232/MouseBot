@@ -95,7 +95,9 @@ public class MBUserInterface {
         titleColumn.setMinWidth(90);
         titleColumn.setMaxWidth(90);
         xCoordColumn.setCellValueFactory(new PropertyValueFactory<MBAction, Integer>("xCoord"));
+        xCoordColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         yCoordColumn.setCellValueFactory(new PropertyValueFactory<MBAction, Integer>("yCoord"));
+        yCoordColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         actionColumn.setCellValueFactory(new PropertyValueFactory<MBAction, String>("action"));
         actionColumn.setMinWidth(180);
         actionColumn.setMaxWidth(180);
