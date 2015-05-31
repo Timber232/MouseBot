@@ -8,12 +8,17 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,6 +27,8 @@ import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 public class MBUserInterface {
+	private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
+	
 	private VBox everything;
 	// Top menu buttons
 	public Button buttonRecord = new Button("Record");	// Record Button
@@ -79,6 +86,58 @@ public class MBUserInterface {
 	@SuppressWarnings("unchecked")
 	public TableView<MBAction> addMouseBotTable() {
         table.setEditable(true);
+        
+        // Allow drag/drop
+        // TODO: Analyze this code later
+        // Got this code from:
+        // http://stackoverflow.com/questions/28603224/sort-tableview-with-drag-and-drop-rows
+        table.setRowFactory(tv -> {
+        	TableRow<MBAction> row = new TableRow<>();
+        	row.setOnDragDetected(event -> {
+                if (! row.isEmpty()) {
+                    Integer index = row.getIndex();
+                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                    db.setDragView(row.snapshot(null, null));
+                    ClipboardContent cc = new ClipboardContent();
+                    cc.put(SERIALIZED_MIME_TYPE, index);
+                    db.setContent(cc);
+                    event.consume();
+                }
+            });
+        	
+            row.setOnDragOver(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        event.consume();
+                    }
+                }
+            });
+
+            row.setOnDragDropped(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                    int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
+                    MBAction draggedCell = table.getItems().remove(draggedIndex);
+
+                    int dropIndex ; 
+
+                    if (row.isEmpty()) {
+                        dropIndex = table.getItems().size() ;
+                    } else {
+                        dropIndex = row.getIndex();
+                    }
+
+                    table.getItems().add(dropIndex, draggedCell);
+
+                    event.setDropCompleted(true);
+                    table.getSelectionModel().select(dropIndex);
+                    event.consume();
+                }
+            });
+        	return row;
+        });
         
         // Table columns
         TableColumn<MBAction, String> titleColumn = new TableColumn<MBAction, String>("Title");
