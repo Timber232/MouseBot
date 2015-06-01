@@ -1,5 +1,9 @@
 package com.lawlesschickens.mousebot;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -28,6 +32,7 @@ import javafx.util.converter.IntegerStringConverter;
 
 public class MBUserInterface {
 	private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
+	public IntegerProperty currentlySelectedCell = new SimpleIntegerProperty();
 	
 	private VBox everything;
 	// Top menu buttons
@@ -136,6 +141,7 @@ public class MBUserInterface {
                     event.consume();
                 }
             });
+            
         	return row;
         });
         
@@ -187,6 +193,15 @@ public class MBUserInterface {
         		actionColumn, timerColumn, jitterColumn, loopColumn);getClass();
 		// Add data to the table
 		table.setItems(data);
+		
+        // Get the index of the currently selected row
+        table.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Object>() {
+			@Override
+			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+				currentlySelectedCell.set(Integer.parseInt(newValue.toString()));
+			}
+        });
+		
 		return table;
 	}
 	

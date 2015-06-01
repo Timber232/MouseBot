@@ -8,9 +8,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -24,8 +22,6 @@ import org.jnativehook.mouse.NativeMouseListener;
 import org.jnativehook.mouse.NativeMouseMotionListener;
 
 public class MouseBot extends Application{
-	@FXML
-	private Label currentMouseLocation;
 	private boolean isRecording = false;
 	private MBUserInterface mouseBotUI = new MBUserInterface();
 	private Thread mbThread;
@@ -74,6 +70,20 @@ public class MouseBot extends Application{
 				mouseBotUI.textLoop.setText("0");
 				mbThread = new Thread(new MBRunnable(mouseBotUI));
 				mbThread.start();
+			}
+		});
+        
+        // "Remove" button listener
+        mouseBotUI.buttonRemove.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				int currentIndex = mouseBotUI.currentlySelectedCell.get();
+				isRecording = true;
+				toogleRecordBtn();
+				if(mouseBotUI.data.size() != 0 && currentIndex != -1) {
+					mouseBotUI.data.remove(currentIndex);
+					mouseBotUI.table.getSelectionModel().clearSelection();	
+				}
 			}
 		});
         
