@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -23,6 +24,7 @@ import org.jnativehook.mouse.NativeMouseMotionListener;
 
 public class MouseBot extends Application{
 	private boolean isRecording = false;
+	private boolean isEditing = false;
 	private MBUserInterface mouseBotUI = new MBUserInterface();
 	private Thread mbThread;
 	
@@ -87,6 +89,19 @@ public class MouseBot extends Application{
 			}
 		});
         
+        // "Edit" button listener
+        mouseBotUI.buttonEdit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				isRecording = true;
+				toogleRecordBtn();
+				isEditing = true;
+				System.out.println(isEditing);
+				toogleEditingBtn();
+				
+			}
+		});
+        
         // Loop input "On Change" listener
         mouseBotUI.textFieldLoop.textProperty().addListener((observable, oldValue, newValue) -> {
         	if(newValue.isEmpty()) {
@@ -111,6 +126,32 @@ public class MouseBot extends Application{
         stage.setResizable(false);
         stage.setAlwaysOnTop(true);
         stage.show();
+        
+        // Scene key listener
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				 System.out.println(event.getText().equals(" " ));
+				 System.out.println(event.getCode());
+				 if(event.getCode().equals("ESC")) {
+					 // Exit edit mode
+				 } else if(event.getText().equals("/")) {
+					 // Execute edit					 
+					 int currentIndex = mouseBotUI.currentlySelectedCell.get();
+					 MBAction selectedItem = mouseBotUI.table.getSelectionModel().getSelectedItem();
+					 
+					 int x = Integer.parseInt(mouseBotUI.textCoordinate.getText().split(", ")[0]);
+					 int y = Integer.parseInt(mouseBotUI.textCoordinate.getText().split(", ")[1]);
+					 
+					selectedItem.setxCoord(x);
+					selectedItem.setyCoord(y);
+					 mouseBotUI.data.set(currentIndex, selectedItem);
+					 System.out.println(mouseBotUI.textCoordinate.getText().split(",")[0]);
+					 System.out.println(mouseBotUI.textCoordinate.getText().split(",")[1]);
+				 }
+				
+			}
+        });
         
         // Shutdown JNativeHook on close:
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -209,8 +250,22 @@ public class MouseBot extends Application{
 			mouseBotUI.textAddNode.setText("Press 'a' to add a node.");
 		} else {
 			mouseBotUI.buttonRecord.setText("Record");
-			mouseBotUI.textAddNode.setText("");
+			mouseBotUI.textAddNode.setText(""); 
 		}
+    }
+    
+    private void toogleEditingBtn() {
+    	if(isEditing)  {
+    		System.out.println("Editing...");
+    		mouseBotUI.buttonEdit.setText("Editing...");
+    		mouseBotUI.buttonEdit.setDisable(true);
+    		mouseBotUI.textAddNode.setText("Press 'esc' to exit edit mode, and 'space; to confirm edit.");
+    	} else {
+    		System.out.println("Exit Edit");
+    		mouseBotUI.buttonEdit.setText("Edit");
+    		mouseBotUI.buttonEdit.setDisable(false);
+    		mouseBotUI.textAddNode.setText(""); 
+    	}
     }
 
     public static void main(String [] args) {

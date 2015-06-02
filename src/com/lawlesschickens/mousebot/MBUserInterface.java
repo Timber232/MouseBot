@@ -36,9 +36,10 @@ public class MBUserInterface {
 	
 	private VBox everything;
 	// Top menu buttons
-	public Button buttonRecord = new Button("Record");	// Record Button
-    public Button buttonRemove = new Button("Remove");	// Remove Button
-    public Button buttonPlay 	= new Button("Play");	// Play Button
+	public Button buttonRecord 	= new Button("Record");	// Record Button
+    public Button buttonRemove 	= new Button("Remove");	// Remove Button
+    public Button buttonPlay	= new Button("Play");	// Play Button
+    public Button buttonEdit 	= new Button("Edit");
     
     // Top menu labels
     public Label labelLoop = new Label("Loops: ");		// Loops label
@@ -82,7 +83,7 @@ public class MBUserInterface {
         loopUserInputContainer.setAlignment(Pos.CENTER);
         loopUserInputContainer.getChildren().addAll(textFieldLoop);
         
-        topMenuContainer.getChildren().addAll(buttonRecord, buttonRemove, buttonPlay, labelContainer);
+        topMenuContainer.getChildren().addAll(buttonRecord, buttonRemove, buttonPlay, buttonEdit, labelContainer);
         topMenu.setLeft(topMenuContainer);
         topMenu.setRight(loopUserInputContainer);
         return topMenu;
