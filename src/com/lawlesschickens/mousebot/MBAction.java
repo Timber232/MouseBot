@@ -2,40 +2,38 @@ package com.lawlesschickens.mousebot;
 
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 
 public class MBAction {
-	private static SimpleListProperty<String> actionList = new SimpleListProperty<String>(
-			FXCollections.observableArrayList (
-					new String("<Text>"),
-					new String("<Mouse Move>"),
-					new String("<Left Click>"),
-					new String("<Left Click Hold>"),
-					new String("<Left Click Release>"),
-					new String("<Right Click>"),
-					new String("<Right Click Hold>")
-				)
-			);
+	public enum Action {
+		MOUSE_LEFT_CLICK, 
+		MOUSE_RIGHT_CLICK, 
+		MOUSE_LEFT_CLICK_HOLD, 
+		MOUSE_LEFT_CLICK_RELEASE,
+		MOUSE_RIGHT_CLICK_HOLD,
+		MOUSE_RIGHT_CLICK_RELEASE,
+		
+	}; 
+
 	private static final SimpleIntegerProperty mainLoop = new SimpleIntegerProperty(1);
 	private final SimpleStringProperty title = new SimpleStringProperty("");
 	private final SimpleIntegerProperty xCoord = new SimpleIntegerProperty(0);
 	private final SimpleIntegerProperty yCoord = new SimpleIntegerProperty(0);
-	private final SimpleStringProperty action = new SimpleStringProperty("");
+	private final SimpleObjectProperty<Action> actionList;
 	private final SimpleFloatProperty timer = new SimpleFloatProperty(0.0f);
 	private final SimpleIntegerProperty jitter = new SimpleIntegerProperty(0);
 	private final SimpleIntegerProperty loop = new SimpleIntegerProperty(0);
 
 	public MBAction() {
-		this("",0,0,"",0.0f,0,0);
+		this("",0,0, Action.MOUSE_LEFT_CLICK,0.0f,0,0);
 	}
 
-	public MBAction(String title, int xCoord, int yCoord, String action, float timer, int jitter, int loop) {
+	public MBAction(String title, int xCoord, int yCoord, Action action, float timer, int jitter, int loop) {
 		setTitle(title);
 		setxCoord(xCoord);
 		setyCoord(yCoord);
-		setAction(action);
+		this.actionList = new SimpleObjectProperty<>(action);
 		setTimer(timer);
 		setJitter(jitter);
 		setLoop(loop);
@@ -45,14 +43,14 @@ public class MBAction {
 		return mainLoop.get();
 	}
 
-	public String getAction() {
-		return action.get();
-	}
+	public Action getAction() {
+        return actionList.get();
+    }
 
-	public void setAction(String action) {
-		this.action.set(action);
-	}
-
+    public void setAction(Action actionList) {
+        this.actionList.set(actionList);
+    }
+    
 	public static SimpleIntegerProperty mainLoopProperty() {
 		return mainLoop;
 	}
@@ -131,9 +129,5 @@ public class MBAction {
 
 	public void setLoop(int loop) {
 		this.loop.set(loop);
-	}
-
-	public static SimpleListProperty<String> getActionlist() {
-		return actionList;
 	}
 }

@@ -175,7 +175,7 @@ public class MouseBot extends Application{
 									"...", 
 									MouseInfo.getPointerInfo().getLocation().x, 
 									MouseInfo.getPointerInfo().getLocation().y, 
-									"(Choose One)", 
+									MBAction.Action.MOUSE_LEFT_CLICK, 
 									0.2f, 
 									0, 
 									1

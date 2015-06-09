@@ -51,11 +51,16 @@ public class MBUserInterface {
     
     public Text textAddNode = new Text("");
     public Text textCoordinate = new Text();
-    public Text textAuthor = new Text("Timothy Haryadi");
+    public Text textVersion = new Text("Version 0.5");
     
     public TextField textFieldLoop = new TextField();
     public TableView<MBAction> table = new TableView<MBAction>();
     public final ObservableList<MBAction> data = FXCollections.observableArrayList();
+    private final ObservableList<MBAction.Action> actionListData = FXCollections.observableArrayList(
+    		MBAction.Action.MOUSE_LEFT_CLICK,
+    		MBAction.Action.MOUSE_LEFT_CLICK_HOLD,
+    		MBAction.Action.MOUSE_LEFT_CLICK_RELEASE
+    );
 
 	public MBUserInterface() {
 		this.everything = new VBox();
@@ -149,7 +154,7 @@ public class MBUserInterface {
         TableColumn<MBAction, String> titleColumn = new TableColumn<MBAction, String>("Title");
         TableColumn<MBAction, Integer> xCoordColumn = new TableColumn<MBAction, Integer>("X-Coord");
         TableColumn<MBAction, Integer> yCoordColumn = new TableColumn<MBAction, Integer>("Y-Coord");
-        TableColumn<MBAction, String> actionColumn = new TableColumn<MBAction, String>("Action");
+        TableColumn<MBAction, MBAction.Action> actionColumn = new TableColumn<MBAction, MBAction.Action>("Action");
         TableColumn<MBAction, Float> timerColumn 	= new TableColumn<MBAction, Float>("Timer");
         TableColumn<MBAction, Integer> jitterColumn = new TableColumn<MBAction, Integer>("Jitter");
         TableColumn<MBAction, Integer> loopColumn 	= new TableColumn<MBAction, Integer>("Loop");
@@ -163,7 +168,7 @@ public class MBUserInterface {
         xCoordColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         yCoordColumn.setCellValueFactory(new PropertyValueFactory<MBAction, Integer>("yCoord"));
         yCoordColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        actionColumn.setCellValueFactory(new PropertyValueFactory<MBAction, String>("action"));
+        actionColumn.setCellValueFactory(new PropertyValueFactory<MBAction, MBAction.Action>("action"));
         actionColumn.setMinWidth(180);
         actionColumn.setMaxWidth(180);
         timerColumn.setCellValueFactory(new PropertyValueFactory<MBAction, Float>("timer"));
@@ -185,8 +190,9 @@ public class MBUserInterface {
 			System.err.println(e.getMessage());
 		}
 
-        ObservableList<String> actionCombo = MBAction.getActionlist();
-        actionColumn.setCellFactory(ComboBoxTableCell.forTableColumn(actionCombo));
+        actionColumn.setCellFactory(ComboBoxTableCell.<MBAction, MBAction.Action>forTableColumn(MBAction.Action.values()));
+        
+        //actionColumn.setCellFactory(ComboBoxTableCell.forTableColumn(actionCombo));
         
         // Add table columns to the the actual table
         table.getColumns().addAll(titleColumn, xCoordColumn, yCoordColumn, 
@@ -210,7 +216,7 @@ public class MBUserInterface {
         footer.setPadding(new Insets(0, 10, 10, 10));
         footer.setLeft(textAddNode);
         footer.setCenter(textCoordinate);
-        footer.setRight(textAuthor);
+        footer.setRight(textVersion);
 		return footer;
 	}
 
