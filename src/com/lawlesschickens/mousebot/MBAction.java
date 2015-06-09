@@ -15,12 +15,21 @@ public class MBAction {
 		MOUSE_RIGHT_CLICK_RELEASE,
 		
 	}; 
-
+//	private static SimpleListProperty<String> actionList = new SimpleListProperty<String>(
+//			FXCollections.observableArrayList (
+//					new String("<Mouse Move>"),
+//					new String("<Left Click>"),
+//					new String("<Left Click Hold>"),
+//					new String("<Left Click Release>"),
+//					new String("<Right Click>"),
+//					new String("<Right Click Hold>")
+//				)
+//			);
 	private static final SimpleIntegerProperty mainLoop = new SimpleIntegerProperty(1);
 	private final SimpleStringProperty title = new SimpleStringProperty("");
 	private final SimpleIntegerProperty xCoord = new SimpleIntegerProperty(0);
 	private final SimpleIntegerProperty yCoord = new SimpleIntegerProperty(0);
-	private final SimpleObjectProperty<Action> actionList;
+	private final SimpleObjectProperty<Action> actionList= new SimpleObjectProperty<Action>(Action.MOUSE_LEFT_CLICK);
 	private final SimpleFloatProperty timer = new SimpleFloatProperty(0.0f);
 	private final SimpleIntegerProperty jitter = new SimpleIntegerProperty(0);
 	private final SimpleIntegerProperty loop = new SimpleIntegerProperty(0);
@@ -33,7 +42,7 @@ public class MBAction {
 		setTitle(title);
 		setxCoord(xCoord);
 		setyCoord(yCoord);
-		this.actionList = new SimpleObjectProperty<>(action);
+		setAction(action);
 		setTimer(timer);
 		setJitter(jitter);
 		setLoop(loop);
@@ -46,6 +55,10 @@ public class MBAction {
 	public Action getAction() {
         return actionList.get();
     }
+	
+	public SimpleObjectProperty<Action> actionListProperty() {
+		return actionList;
+	}
 
     public void setAction(Action actionList) {
         this.actionList.set(actionList);

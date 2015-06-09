@@ -56,11 +56,6 @@ public class MBUserInterface {
     public TextField textFieldLoop = new TextField();
     public TableView<MBAction> table = new TableView<MBAction>();
     public final ObservableList<MBAction> data = FXCollections.observableArrayList();
-    private final ObservableList<MBAction.Action> actionListData = FXCollections.observableArrayList(
-    		MBAction.Action.MOUSE_LEFT_CLICK,
-    		MBAction.Action.MOUSE_LEFT_CLICK_HOLD,
-    		MBAction.Action.MOUSE_LEFT_CLICK_RELEASE
-    );
 
 	public MBUserInterface() {
 		this.everything = new VBox();
@@ -168,7 +163,7 @@ public class MBUserInterface {
         xCoordColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         yCoordColumn.setCellValueFactory(new PropertyValueFactory<MBAction, Integer>("yCoord"));
         yCoordColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        actionColumn.setCellValueFactory(new PropertyValueFactory<MBAction, MBAction.Action>("action"));
+        actionColumn.setCellValueFactory(new PropertyValueFactory<MBAction, MBAction.Action>("actionList"));
         actionColumn.setMinWidth(180);
         actionColumn.setMaxWidth(180);
         timerColumn.setCellValueFactory(new PropertyValueFactory<MBAction, Float>("timer"));
