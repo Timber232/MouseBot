@@ -85,14 +85,14 @@ public class MBRunnable extends Thread{
 			robot.mouseRelease(InputEvent.BUTTON1_MASK);
 			break;
 		case MOUSE_RIGHT_CLICK:
-	    	robot.mousePress(InputEvent.BUTTON2_MASK);
-	    	robot.mouseRelease(InputEvent.BUTTON2_MASK);
+	    	robot.mousePress(InputEvent.BUTTON3_MASK);
+	    	robot.mouseRelease(InputEvent.BUTTON3_MASK);
 			break;
 		case MOUSE_RIGHT_CLICK_HOLD:
-			robot.mousePress(InputEvent.BUTTON2_MASK);
+			robot.mousePress(InputEvent.BUTTON3_MASK);
 			break;
 		case MOUSE_RIGHT_CLICK_RELEASE:
-			robot.mouseRelease(InputEvent.BUTTON2_MASK);
+			robot.mouseRelease(InputEvent.BUTTON3_MASK);
 		default:
 			break;
 		}
