@@ -27,7 +27,7 @@ public class MouseBot extends Application{
 	private boolean isRecording = false;
 	private MBUserInterface mouseBotUI = new MBUserInterface();
 	private Thread mbThread;
-
+	private MBRunnable mbRunnable;
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -70,7 +70,8 @@ public class MouseBot extends Application{
 				isRecording = true;
 				toogleRecordBtn();
 				mouseBotUI.textLoop.setText("0");
-				mbThread = new Thread(new MBRunnable(mouseBotUI));
+				mbRunnable = new MBRunnable(mouseBotUI);
+				mbThread = new Thread(mbRunnable);
 				mbThread.start();
 			}
 		});
@@ -165,7 +166,6 @@ public class MouseBot extends Application{
 
 			}
 
-			@SuppressWarnings("deprecation")
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent e) {
 				Platform.runLater(() ->{
@@ -182,7 +182,7 @@ public class MouseBot extends Application{
 									));
 						}
 					} else if (NativeKeyEvent.getKeyText(e.getKeyCode()).equals("S") ){
-						mbThread.stop();
+						mbRunnable.end();
 						mouseBotUI.textAddNode.setText("Stopped");
 					}
 				});

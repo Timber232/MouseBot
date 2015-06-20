@@ -7,7 +7,7 @@ import java.util.Random;
 
 import javafx.application.Platform;
 
-public class MBRunnable extends Thread{
+public class MBRunnable implements Runnable{
 
 	private MBUserInterface mouseBotUI;
 	private Robot robot;
@@ -15,15 +15,15 @@ public class MBRunnable extends Thread{
 	private int currentCellLoop= 0;
 	private int mainLoopLeft = 0;
 	private int totalCellLoop = 0;
+	private boolean isRunning = true;
 	
 	public MBRunnable(MBUserInterface mouseBotUI) {
 		super();
 		this.mouseBotUI = mouseBotUI;
 	}
 	
-	@Override
-	public void start() {
-
+	public void end() {
+		this.isRunning = false;
 	}
 	
 	@Override
@@ -39,10 +39,12 @@ public class MBRunnable extends Thread{
 				int jitter = Integer.parseInt(mouseBotUI.table.getColumns().get(5).getCellData(o).toString());
 				int loop = Integer.parseInt(mouseBotUI.table.getColumns().get(6).getCellData(o).toString());
 				totalCellLoop = loop;
+				if(!this.isRunning) return;
 				for(currentCellLoop = 0; currentCellLoop<totalCellLoop; currentCellLoop++) {
 					try {
 						Thread.sleep((int)timer);
 						Platform.runLater(() ->{
+							if(!this.isRunning) return;
 							mouseBotUI.table.requestFocus();
 							mouseBotUI.table.getSelectionModel().select(o);
 							mouseBotUI.table.getFocusModel().focus(0);
