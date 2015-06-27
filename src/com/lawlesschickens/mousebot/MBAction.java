@@ -13,18 +13,8 @@ public class MBAction {
 		MOUSE_LEFT_CLICK_RELEASE,
 		MOUSE_RIGHT_CLICK_HOLD,
 		MOUSE_RIGHT_CLICK_RELEASE,
-		
-	}; 
-//	private static SimpleListProperty<String> actionList = new SimpleListProperty<String>(
-//			FXCollections.observableArrayList (
-//					new String("<Mouse Move>"),
-//					new String("<Left Click>"),
-//					new String("<Left Click Hold>"),
-//					new String("<Left Click Release>"),
-//					new String("<Right Click>"),
-//					new String("<Right Click Hold>")
-//				)
-//			);
+	};
+	
 	private static final SimpleIntegerProperty mainLoop = new SimpleIntegerProperty(1);
 	private final SimpleStringProperty title = new SimpleStringProperty("");
 	private final SimpleIntegerProperty xCoord = new SimpleIntegerProperty(0);
