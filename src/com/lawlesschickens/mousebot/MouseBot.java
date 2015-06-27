@@ -11,8 +11,14 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import org.jnativehook.GlobalScreen;
@@ -28,7 +34,8 @@ public class MouseBot extends Application{
 	private MBUserInterface mouseBotUI = new MBUserInterface();
 	private Thread mbThread;
 	private MBRunnable mbRunnable;
-
+	private Stage overlay = new Stage();
+	
 	@Override
 	public void start(Stage stage) throws Exception {
 
@@ -60,6 +67,20 @@ public class MouseBot extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				toogleRecordBtn();
+				overlay.initStyle(StageStyle.TRANSPARENT);
+				final Circle circ = new Circle(30, 30, 10);
+				
+				StackPane root = new StackPane();
+		        root.getChildren().add(circ);
+		        root.setStyle(
+		                "-fx-background-color: rgba(255, 255, 255, 0);"
+		        );
+		        final Scene scene = new Scene(root);
+		        scene.setFill(null);
+		        overlay.setScene(scene);
+		        overlay.setAlwaysOnTop(true);
+		        overlay.show();
+
 			}
 		});
 
@@ -140,6 +161,7 @@ public class MouseBot extends Application{
 			}
 		});
 
+		
 		// Shutdown JNativeHook on close:
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
@@ -228,7 +250,7 @@ public class MouseBot extends Application{
 			}
 		});
 	}
-
+    
 	private void toogleRecordBtn() {
 		isRecording = isRecording == false ? true: false;
 		if(isRecording) {
